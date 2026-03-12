@@ -1,21 +1,22 @@
 package com.example.t4_p1
 
-import android.R
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
@@ -24,19 +25,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.t4_p1.ui.theme.T4_P1Theme
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
@@ -53,6 +50,46 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+data class News(
+    val title: String,
+    val date: String
+)
+
+val latestNews = listOf(
+    News("El presidente de EE.UU. no muestra signos de arrepentimiento...", "febrero 08 - 2024"),
+    News("Bañarse en la piscina del desierto de Cleopatra", "febrero 10 - 2024"),
+    News("Gigantes tecnológicos apuestan por la IA", "febrero 12 - 2024")
+)
+
+@Composable
+fun NewsCard(news: News){
+    Box(
+        modifier = Modifier
+            .width(280.dp)
+            .height(180.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(Color(0xFF6C63FF))
+            .padding(16.dp)
+    ){
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Text(
+                text = news.title,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                fontSize = 25.sp
+            )
+            Text(
+                text = news.date,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                fontSize = 15.sp
+            )
+        }
+    }
+}
 
 @Composable
 fun HomeScreen(){
@@ -115,6 +152,19 @@ fun HomeScreen(){
                 fontSize = 25.sp,
                 color = Color.LightGray
             )
+        }
+        Text(
+            text = "Últimas noticias",
+            fontWeight = FontWeight.Bold,
+            fontSize = 25.sp,
+            modifier = Modifier.padding(20.dp)
+            
+        )
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp)
+        ) {
+            items(latestNews) {news -> NewsCard(news = news)}
         }
     }
 }
